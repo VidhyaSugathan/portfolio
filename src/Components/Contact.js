@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 
 function Contact() {
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const copyEmail = () => {
     navigator.clipboard.writeText("vidhyasugathan19@gmail.com");
@@ -17,10 +20,31 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Wire up to EmailJS or Formspree as needed
-    setSent(true);
-    setForm({ name: "", email: "", message: "" });
-    setTimeout(() => setSent(false), 3000);
+    setLoading(true);
+    setError(false);
+
+    emailjs
+      .send(
+        "service_a2cnmnq", // ← replace with your Service ID
+        "template_jsuu4s9", // ← replace with your Template ID
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+        },
+        "RqTz4VorJZloxeKxk" // ← replace with your Public Key
+      )
+      .then(() => {
+        setLoading(false);
+        setSent(true);
+        setForm({ name: "", email: "", message: "" });
+        setTimeout(() => setSent(false), 3000);
+      })
+      .catch(() => {
+        setLoading(false);
+        setError(true);
+        setTimeout(() => setError(false), 3000);
+      });
   };
 
   return (
@@ -109,8 +133,14 @@ function Contact() {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="btn-primary">
-            {sent ? "✅ Message Sent!" : "Send Message"}
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading
+              ? "Sending..."
+              : sent
+              ? "✅ Message Sent!"
+              : error
+              ? "❌ Failed, Try Again"
+              : "Send Message"}
           </button>
         </motion.form>
       </div>
