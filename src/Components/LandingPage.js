@@ -40,7 +40,7 @@ function LandingPage() {
 
           <div className="social-links">
             <a
-              href="https://linkedin.com/in/your-profile"
+              href="https://www.linkedin.com/in/vidhya-sugathan/"
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn"
@@ -56,7 +56,7 @@ function LandingPage() {
               </svg>
             </a>
             <a
-              href="https://github.com/your-profile"
+              href="https://github.com/VidhyaSugathan"
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub"
